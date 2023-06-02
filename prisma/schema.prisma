@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  firstName    String?
+  lastName     String?
+  email        String  @unique
+  passwordHash String
+
+  @@map("users")
+}
+
+model Course {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title       String
+  description String?
+  price       Int
+  // # lecturer
+  // # students
+  // keywords = models.ManyToManyField("Keyword", related_name="courses")
+  // # comments
+  lectures    Lecture[]
+
+  @@map("courses")
+}
+
+model Lecture {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title       String
+  description String?
+
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+
+  //   content = models.TextField()
+  //   video_url = models.URLField()
+  //   course = models.ForeignKey(
+  //   Course, on_delete=models.CASCADE, related_name="lectures"
+  //   )
+  //   # lecturer = models.ForeignKey(Lecturer, on_delete=models.SET_NULL)
+  //   # students = models.ManyToManyField(Student, related_name='lectures')
+  //   # comments
+  //   created_at = models.DateTimeField(auto_now_add=True)
+
+  @@map("lectures")
+}
+
+model Article {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title       String
+  description String?
+
+  //   content = models.TextField()
+  //   video_url = models.URLField()
+  //   course = models.ForeignKey(
+  //   Course, on_delete=models.CASCADE, related_name="lectures"
+  //   )
+  //   # lecturer = models.ForeignKey(Lecturer, on_delete=models.SET_NULL)
+  //   # students = models.ManyToManyField(Student, related_name='lectures')
+  //   # comments
+  //   created_at = models.DateTimeField(auto_now_add=True)
+  @@map("articles")
+}
