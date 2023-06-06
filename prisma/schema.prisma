@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,6 +5,11 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+enum Role {
+  STUDENT
+  AUTHOR
 }
 
 model User {
@@ -19,8 +21,18 @@ model User {
   lastName     String?
   email        String  @unique
   passwordHash String
+  role         Role    @default(STUDENT)
 
-  @@map("users")
+  authoredCourses Course[]  @relation("CourseAuthors")
+  enrolledCourses Course[]  @relation("CourseStudents")
+  lectures        Lecture[] @relation("LectureAuthor")
+  articles        Article[] @relation("ArticleAuthor")
+
+  lectureId Int?
+  Lecture   Lecture?  @relation(fields: [lectureId], references: [id])
+  Article   Article[]
+
+  @@map(name: "users")
 }
 
 model Course {
@@ -30,14 +42,18 @@ model Course {
 
   title       String
   description String?
-  price       Int
-  // # lecturer
-  // # students
-  // keywords = models.ManyToManyField("Keyword", related_name="courses")
-  // # comments
-  lectures    Lecture[]
+  price       Float?
 
-  @@map("courses")
+  lectures       Lecture[]
+  keywords       Keyword[]       @relation("CourseKeywords")
+  CourseKeywords CourseKeyword[]
+
+  authors  User[]    @relation("CourseAuthors")
+  students User[]    @relation("CourseStudents")
+  comments Comment[]
+  articles Article[]
+
+  @@map(name: "courses")
 }
 
 model Lecture {
@@ -47,21 +63,19 @@ model Lecture {
 
   title       String
   description String?
+  content     String  @db.Text
+  videoUrl    String
 
   courseId Int
-  course   Course @relation(fields: [courseId], references: [id])
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
-  //   content = models.TextField()
-  //   video_url = models.URLField()
-  //   course = models.ForeignKey(
-  //   Course, on_delete=models.CASCADE, related_name="lectures"
-  //   )
-  //   # lecturer = models.ForeignKey(Lecturer, on_delete=models.SET_NULL)
-  //   # students = models.ManyToManyField(Student, related_name='lectures')
-  //   # comments
-  //   created_at = models.DateTimeField(auto_now_add=True)
+  authorId Int?
+  author   User? @relation("LectureAuthor", fields: [authorId], references: [id])
 
-  @@map("lectures")
+  comments Comment[]
+  User     User[]
+
+  @@map(name: "lectures")
 }
 
 model Article {
@@ -71,15 +85,77 @@ model Article {
 
   title       String
   description String?
+  content     String  @db.Text
+  videoUrl    String
 
-  //   content = models.TextField()
-  //   video_url = models.URLField()
-  //   course = models.ForeignKey(
-  //   Course, on_delete=models.CASCADE, related_name="lectures"
-  //   )
-  //   # lecturer = models.ForeignKey(Lecturer, on_delete=models.SET_NULL)
-  //   # students = models.ManyToManyField(Student, related_name='lectures')
-  //   # comments
-  //   created_at = models.DateTimeField(auto_now_add=True)
-  @@map("articles")
+  keywords        Keyword[]        @relation("ArticleKeywords")
+  ArticleKeywords ArticleKeyword[]
+
+  courseId Int?
+  course   Course? @relation(fields: [courseId], references: [id])
+
+  authorId Int?
+  author   User? @relation("ArticleAuthor", fields: [authorId], references: [id])
+
+  comments Comment[]
+  userId   Int?
+  User     User?     @relation(fields: [userId], references: [id])
+
+  @@map(name: "articles")
+}
+
+model Keyword {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title    String
+  articles Article[] @relation("ArticleKeywords")
+  courses  Course[]  @relation("CourseKeywords")
+
+  ArticleKeywords ArticleKeyword[]
+  CourseKeywords  CourseKeyword[]
+
+  @@map(name: "keywords")
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  text String
+
+  lectureId Int?
+  lecture   Lecture? @relation(fields: [lectureId], references: [id], onDelete: Cascade)
+
+  courseId Int?
+  course   Course? @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  articleId Int?
+  article   Article? @relation(fields: [articleId], references: [id])
+
+  @@map(name: "comments")
+}
+
+model ArticleKeyword {
+  articleId Int
+  keywordId Int
+
+  article Article @relation(fields: [articleId], references: [id])
+  keyword Keyword @relation(fields: [keywordId], references: [id])
+
+  @@id([articleId, keywordId])
+  @@map(name: "article_keywords")
+}
+
+model CourseKeyword {
+  courseId  Int
+  keywordId Int
+
+  course  Course  @relation(fields: [courseId], references: [id])
+  keyword Keyword @relation(fields: [keywordId], references: [id])
+
+  @@id([courseId, keywordId])
+  @@map(name: "course_keywords")
 }
