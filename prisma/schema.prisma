@@ -17,11 +17,12 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  firstName    String?
-  lastName     String?
-  email        String  @unique
-  passwordHash String
-  role         Role    @default(STUDENT)
+  firstName          String?
+  lastName           String?
+  email              String  @unique
+  passwordHash       String
+  rtHash String?
+  role               Role    @default(STUDENT)
 
   authoredCourses Course[]  @relation("CourseAuthors")
   enrolledCourses Course[]  @relation("CourseStudents")

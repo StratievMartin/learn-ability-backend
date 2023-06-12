@@ -4,12 +4,12 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  Param,
   Post,
 } from '@nestjs/common'
 import { KeywordDto } from './dto'
 import { KeywordService } from './keyword.service'
-
+import { Public } from 'src/auth/decorator'
+@Public()
 @Controller()
 export class KeywordController {
   constructor(private keywordService: KeywordService) {}

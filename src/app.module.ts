@@ -5,6 +5,8 @@ import { UserModule } from './user/user.module'
 import { CourseModule } from './course/course.module'
 import { PrismaModule } from './prisma/prisma.module'
 import { KeywordModule } from './keyword/keyword.module'
+import { APP_GUARD } from '@nestjs/core'
+import { AtGuard } from './auth/guard'
 
 @Module({
   imports: [
@@ -17,5 +19,11 @@ import { KeywordModule } from './keyword/keyword.module'
     PrismaModule,
     KeywordModule,
   ],
+  providers:[
+    {
+      provide: APP_GUARD,
+      useClass: AtGuard
+    }
+  ]
 })
 export class AppModule {}

@@ -9,7 +9,9 @@ import {
 } from '@nestjs/common'
 import { CourseService } from './course.service'
 import { CourseDto } from './dto'
+import { Public } from 'src/auth/decorator'
 
+@Public()
 @Controller()
 export class CourseController {
   constructor(private courseService: CourseService) {}
@@ -25,8 +27,6 @@ export class CourseController {
   }
   @Post('courses')
   addCourse(@Body() dto: CourseDto) {
-    console.log('in controller', dto)
-
     return this.courseService.createCourse(dto)
   }
 }
