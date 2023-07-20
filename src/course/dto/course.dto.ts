@@ -8,6 +8,9 @@ import {
   IsString,
 } from 'class-validator'
 export class CourseDto {
+  @IsNumber()
+  id?: number
+
   @IsString()
   @IsNotEmpty()
   title: string

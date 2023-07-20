@@ -26,6 +26,7 @@ export class CourseService {
       throw error
     }
   }
+
   async createCourse(dto: CourseDto) {
     const { title, description, price, keyword } = dto
 
@@ -42,6 +43,49 @@ export class CourseService {
           },
         },
       })
+
+      return course
+    } catch (error) {
+      console.log(error)
+      throw error
+    }
+  }
+
+  async modifyCourse(dto: CourseDto) {
+    const { id, title, description, price, keyword } = dto
+
+    try {
+      const course = await this.prisma.course.update({
+        where: {
+          id: id,
+        },
+        data: {
+          title,
+          description,
+          price: Number(price),
+          keywords: {
+            connect: {
+              id: keyword,
+            },
+          },
+        },
+      })
+
+      return course
+    } catch (error) {
+      console.log(error)
+      throw error
+    }
+  }
+
+  async deleteCourse(id: number) {
+    try {
+      const course = await this.prisma.course.delete({
+        where: {
+          id: id,
+        },
+      })
+      console.log(course)
 
       return course
     } catch (error) {
