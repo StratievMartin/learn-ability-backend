@@ -85,9 +85,8 @@ export class CourseService {
           id: id,
         },
       })
-      console.log(course)
 
-      return course
+      return { message: 'Successfully deleted!' }
     } catch (error) {
       console.log(error)
       throw error

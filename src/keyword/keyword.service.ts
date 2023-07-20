@@ -28,4 +28,19 @@ export class KeywordService {
       throw error
     }
   }
+
+  async deleteKeyword(id: number) {
+    try {
+      const keyword = await this.prisma.keyword.delete({
+        where: {
+          id: id,
+        },
+      })
+
+      return { message: 'Successfully deleted!' }
+    } catch (error) {
+      console.log(error)
+      throw error
+    }
+  }
 }
