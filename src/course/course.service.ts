@@ -27,6 +27,22 @@ export class CourseService {
     }
   }
 
+  async getCoursesByKeyword(keywordId: number) {
+    const keyword = await this.prisma.keyword.findUnique({
+      where: { id: +keywordId },
+      include: { courses: true },
+    })
+
+    if (!keyword) {
+      return null
+    }
+
+    return {
+      courses: keyword.courses,
+      keyword: keyword.title,
+    }
+  }
+
   async createCourse(dto: CourseDto) {
     const { title, description, price, keyword } = dto
 

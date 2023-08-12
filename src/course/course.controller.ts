@@ -28,6 +28,11 @@ export class CourseController {
     return this.courseService.getCourse(id)
   }
 
+  @Get('courses/kwd/:keywordId')
+  getCoursesByKeyword(@Param('keywordId') keywordId: number) {
+    return this.courseService.getCoursesByKeyword(keywordId)
+  }
+
   @Post('courses')
   addCourse(@Body() dto: CourseDto) {
     return this.courseService.createCourse(dto)
