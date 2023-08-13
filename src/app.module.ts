@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config'
 import { AuthModule } from './auth/auth.module'
 import { UserModule } from './user/user.module'
 import { CourseModule } from './course/course.module'
+import { ArticleModule } from './articles/article.module'
 import { PrismaModule } from './prisma/prisma.module'
 import { KeywordModule } from './keyword/keyword.module'
 import { APP_GUARD } from '@nestjs/core'
@@ -16,14 +17,15 @@ import { AtGuard } from './auth/guard'
     AuthModule,
     UserModule,
     CourseModule,
+    ArticleModule,
     PrismaModule,
     KeywordModule,
   ],
-  providers:[
+  providers: [
     {
       provide: APP_GUARD,
-      useClass: AtGuard
-    }
-  ]
+      useClass: AtGuard,
+    },
+  ],
 })
 export class AppModule {}
