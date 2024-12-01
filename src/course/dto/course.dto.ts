@@ -1,44 +1,45 @@
 import {
-  IsArray,
-  IsDecimal,
-  IsNotEmpty,
-  IsNumber,
-  IsNumberString,
-  IsOptional,
-  IsString,
-} from 'class-validator'
+    IsArray,
+    IsDecimal,
+    IsNotEmpty,
+    IsNumber,
+    IsNumberString,
+    IsOptional,
+    IsString,
+} from 'class-validator';
+
 export class CourseDto {
-  @IsNumber()
-  id?: number
+    @IsNumber()
+    id?: number;
 
-  @IsString()
-  @IsNotEmpty()
-  title: string
+    @IsString()
+    @IsNotEmpty()
+    title: string;
 
-  @IsString()
-  @IsNotEmpty()
-  description: string
+    @IsString()
+    @IsNotEmpty()
+    description: string;
 
-  @IsNumberString({}, { message: 'Please provide a valid number' })
-  @IsDecimal({}, { message: 'Please provide a valid number or decimal' })
-  price: string
+    @IsNumberString({}, { message: 'Please provide a valid number' })
+    @IsDecimal({}, { message: 'Please provide a valid number or decimal' })
+    price: string;
 
-  // @IsArray()
-  // lectures: []
+    // @IsArray()
+    // lectures: []
 
-  // @IsArray()
-  @IsOptional()
-  keyword: number
+    // @IsArray()
+    @IsOptional()
+    keyword: number;
 
-  // @IsArray()
-  // authors: []
+    // @IsArray()
+    // authors: []
 
-  // @IsArray()
-  // students: []
+    // @IsArray()
+    // students: []
 
-  // @IsArray()
-  // comments: []
+    // @IsArray()
+    // comments: []
 
-  // @IsArray()
-  // articles: []
+    // @IsArray()
+    // articles: []
 }

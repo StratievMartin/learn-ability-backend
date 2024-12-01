@@ -1,1 +1,1 @@
-export * from './keyword.dto'
+export * from './keyword.dto';

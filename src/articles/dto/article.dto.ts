@@ -1,41 +1,41 @@
 import {
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-  IsUrl,
-} from 'class-validator'
+    IsNotEmpty,
+    IsNumber,
+    IsOptional,
+    IsString,
+    IsUrl,
+} from 'class-validator';
 export class ArticleDto {
-  @IsNumber()
-  @IsOptional()
-  id?: number
+    @IsNumber()
+    @IsOptional()
+    id?: number;
 
-  @IsString()
-  @IsNotEmpty()
-  title: string
+    @IsString()
+    @IsNotEmpty()
+    title: string;
 
-  @IsString()
-  @IsNotEmpty()
-  description: string
+    @IsString()
+    @IsNotEmpty()
+    description: string;
 
-  @IsString()
-  @IsNotEmpty()
-  content: string
+    @IsString()
+    @IsNotEmpty()
+    content: string;
 
-  @IsUrl()
-  @IsOptional()
-  videoUrl?: string
+    @IsUrl()
+    @IsOptional()
+    videoUrl?: string;
 
-  @IsUrl()
-  @IsOptional()
-  imgUrl?: string
+    @IsUrl()
+    @IsOptional()
+    imgUrl?: string;
 
-  @IsOptional()
-  keyword?: number
+    @IsOptional()
+    keyword?: number;
 
-  // @IsString()
-  // author: []
+    // @IsString()
+    // author: []
 
-  // @IsArray()
-  // comments: []
+    // @IsArray()
+    // comments: []
 }
